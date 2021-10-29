@@ -54,7 +54,7 @@ const Home = ({ history }) => {
                 </div>
                 <LoginForm values={values} handleChange={handleChange} handleSubmit={handleSubmit}/>
             </div>
-            <img src={image1}></img>
+            <img src={image1} width="100%" height="60%"></img>
         </div>
       
     )
