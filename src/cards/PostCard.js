@@ -4,21 +4,21 @@ const PostCard = ({
     p
 }) => {
     return(
-        <div class="card mb-3" style={{width: '100%'}}>
-            <div className="card-title p-3 d-flex flex-wrap">
+        <div  className="card mb-3" style={{width: '100%', backgroundColor: "rgb(29, 30, 36)",borderColor:"rgb(54, 56, 69)"}}>
+            <div  className="card-title d-flex flex-wrap p-3">
                 <Avatar alt={p.createdBy} src="https://www.diethelmtravel.com/wp-content/uploads/2016/04/bill-gates-wealthiest-person.jpg" sx={{ width: 50, height: 50 }}/>
-                <h2 class="card-title m-2">{p.createdBy}</h2>
-                <p class="card-title mt-2" style={{ display: 'block', width: '100%'}}>{p.tema}</p>
+                <h3 className="card-title m-2">{p.createdBy}</h3>
+                <p className="card-title mt-2 text-white" style={{ display: 'block', width: '100%'}}>{p.tema}</p>
             </div>
             {
                 p.imagen && <div className="m-3 d-flex justify-content-center">
-                                <img class="card-img" src={p.imagen} alt={p.tema} style={{ width: '80%'}}></img>
+                                <img className="card-img" src={p.imagen} alt={p.tema} style={{ width: '80%'}}></img>
                             </div>
             }
-            <div class="card-body">
-                <p class="card-text" style={{fontSize: '1.5rem'}}><b>{p.texto}</b></p>
-                <button class="btn btn-primary">Like</button>
-                <span className="m-2">{p.likes} likes</span>
+            <div  className="card-body">
+                <p className="card-text text-white" style={{fontSize: '1.5rem'}}><b>{p.texto}</b></p>
+                <button className="btn btn-primary ">Like</button>
+                <span className="m-2 text-white">{p.likes} likes</span>
             </div>
         </div>
     );

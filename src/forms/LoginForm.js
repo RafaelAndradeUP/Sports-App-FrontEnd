@@ -28,7 +28,7 @@ const LoginForm = ({
                     onChange={handleChange}
                     className="m-1"
                 />
-                <button type="submit" className="btn btn-primary m-1">Entrar</button>
+                <button class="button" type="submit" className="btn btn-primary m-1">Entrar</button>
                 <a className="text-white m-3" href="/forgot-password" style={{ textDecoration: 'none' }}>Olvidé mi contraseña</a>
             </form>
         </div>

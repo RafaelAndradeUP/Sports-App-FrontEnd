@@ -1,5 +1,7 @@
 .App {
-  text-align: center;
+  text-align: left;
+  color:#fbb141;
+  background-color: #3f3e3d;
 }
 
 .App-logo {
@@ -14,14 +16,14 @@
 }
 
 .App-header {
-  background-color: #282c34;
+  background-color: #3f3e3d;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  align-items: left;
+  justify-content: left;
   font-size: calc(10px + 2vmin);
-  color: white;
+  color:orange;
 }
 
 .App-link {
@@ -35,4 +37,50 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+div-1{
+  background-color: #3f3e3d;
+}
+
+div-2{
+  background-color: #3f3e3d !important;
+}
+
+h1{
+  font-family: 'Playfair Display', serif;
+  color:#fbb141
+}
+
+h2{
+  font-family: 'Playfair Display', serif;
+  color:white
+}
+h3{
+  font-family: 'Roboto Condensed', sans-serif;
+  color:white;
+  border-color: white;
+}
+
+.tema{
+  color:white !important;
+
+}
+button{
+  background-color: #fbb141 !important;
+  color:#3f3e3d !important;
+  border-color: #3f3e3d !important;
+
+}
+button:hover{
+  background-color: #f7a62d !important;
+  border-color: #3f3e3d !important;
+}
+image{
+  width: 100vw;
+  height: 100vh; 
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  position: relative;
+
 }

@@ -3,6 +3,7 @@ import PostCard from "../cards/PostCard";
 import CreatePostForm from "../forms/CreatePostForm";
 import { useDispatch } from "react-redux";
 import {toast} from "react-toastify";
+import { borderColor } from "@mui/system";
 
 
 const Feed = ({history}) => {
@@ -81,8 +82,8 @@ const Feed = ({history}) => {
     const responisive = () => {
         return (
             <>
-                <div className="container-fluid bg-dark p-3">
-                        <h1 className="text-white text-center">Yarder (aqui podría ir el logo)</h1>
+                <div class="div-1" className="container-fluid  p-3 bg-dark">
+                        <h1 className=" text-left">yarder</h1>
                 </div>
                 <div className="container-fluid">
                     <div className="row">   
@@ -104,16 +105,16 @@ const Feed = ({history}) => {
     const notResponisive = () => {
         return (
             <>
-                <div className="container-fluid bg-dark p-3">
-                    <h1 className="text-white text-center">Yarder (aqui podría ir el logo)</h1>
+                <div  className="container-fluid bg-dark p-3">
+                    <h1 className=" text-left">yarder</h1>
                 </div>
-                <div className="container-fluid">
-                    <div className="row m-5">
+                <div style={{backgroundColor: "rgb(29, 30, 36)"}}  className="container-fluid">
+                    <div  className="row m-5">
                         <div className="col-3  d-flex justify-content-center">
-                            <h1>Perfil del usuario (Borrar)</h1>
-                            <span onClick={logout} style={{cursor: 'pointer'}}>Cerrar sesión</span>
+                            <h2>USUARIO</h2>
+                            <span onClick={logout} style={{cursor: 'pointer', color:"white"}}>Cerrar sesión</span>
                         </div>       
-                        <div className="col-6 d-flex justify-content-center card">
+                        <div style={{backgroundColor: "rgb(29, 30, 36)",borderColor:"rgb(54, 56, 69)"}} className="col-6 d-flex justify-content-center card">
                             <CreatePostForm values={values} handleChange={handleChange} handleSubmit={handleSubmit}/>
                             <h2 className="m-2">Últimas Noticias</h2>
                             {
@@ -123,7 +124,7 @@ const Feed = ({history}) => {
                             }
                 
                         </div>       
-                        <div className="col-3 card">
+                        <div style={{backgroundColor: "rgb(29, 30, 36)",borderColor:"rgb(54, 56, 69)"}}  className="col-3 card">
                             <div className="row m-5">
                                 <h3>Equipos seguidos</h3>
                             </div>
