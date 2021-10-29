@@ -1,4 +1,6 @@
+import { ClassNames } from "@emotion/react";
 import { TextField } from "@mui/material";
+import { makeStyles } from '@mui/styles';
 
 const CreatePostForm = ({
     values,
@@ -8,9 +10,18 @@ const CreatePostForm = ({
 
     const { tema, texto } = values;
 
+
+    const useStyles = makeStyles((theme) => ({
+        input: {
+          color: "#FFF",
+        },
+      }));
+
+    const classes = useStyles();
+
     return(
         <>
-        <div className="card mb-5 mt-3">
+        <div style={{backgroundColor: "rgb(29, 30, 36)",borderColor:"rgb(54, 56, 69)"}} className="card mb-5 mt-3">
             <h1 className="m-3" style={{display: 'block', width: '100%'}}>Nuevo post</h1>
             <form onSubmit={handleSubmit} className="d-flex align-items-center m-3 flex-wrap ">
                 <TextField id="outlined-basic" label="Tema" variant="outlined" placeholder="Tema" value={tema} name="tema" onChange={handleChange} fullWidth className='m-2'/>
@@ -22,8 +33,9 @@ const CreatePostForm = ({
                 fullWidth
                 value={texto}
                 name="texto"
-                className='m-2'
+                className='m-2 text-white'
                 onChange={handleChange}
+                inputProps={{className:ClassNames.input}}
                 />
                 <button className="btn btn-primary m-1">+ Imagen</button>
                 <div className="d-flex justify-content-between m-2">

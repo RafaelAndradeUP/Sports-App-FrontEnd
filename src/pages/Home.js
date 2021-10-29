@@ -2,6 +2,7 @@ import { useState } from "react";
 import LoginForm from "../forms/LoginForm";
 import {toast} from "react-toastify";
 import { useDispatch } from "react-redux";
+import image1 from "../img/fondo1.jpg";
 
 
 
@@ -53,8 +54,12 @@ const Home = ({ history }) => {
                 </div>
                 <LoginForm values={values} handleChange={handleChange} handleSubmit={handleSubmit}/>
             </div>
+            <img src={image1}></img>
         </div>
+      
     )
+
+
 }
 
 export default Home;
