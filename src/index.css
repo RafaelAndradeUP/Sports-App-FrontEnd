@@ -10,3 +10,7 @@ code {
   font-family: 'Playfair Display', serif;
   font-family: 'Roboto Condensed', sans-serif;
 }
+
+html{
+  background-color: "rgb(29, 30, 36)";
+}

@@ -3,6 +3,7 @@ import LoginForm from "../forms/LoginForm";
 import {toast} from "react-toastify";
 import { useDispatch } from "react-redux";
 import image1 from "../img/fondo1.jpg";
+import { login } from "../actions/auth";
 
 
 
@@ -23,16 +24,16 @@ const Home = ({ history }) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        //const { email, password } = values;
+        const { email, password } = values;
 
         try {
-            //let res = await login({ email, password });
+            let res = await login({ email, password });
       
-            if (true) {
-              window.localStorage.setItem("auth", JSON.stringify(values));
+            if (res.data) {
+              window.localStorage.setItem("auth", JSON.stringify(res.data));
               dispatch({
                 type: "LOGGED_IN_USER",
-                payload: values,
+                payload: res.data,
               });
               toast.success(`¡Bienvenido de nuevo!`);
               setTimeout(() => {
