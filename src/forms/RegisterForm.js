@@ -6,7 +6,7 @@ const RegisterForm = ({
     history
 }) => {
 
-    const { name, email, password } = values;
+    const { nombre_usuario, email, password } = values;
 
     return(
         <>
@@ -17,8 +17,8 @@ const RegisterForm = ({
                     style={{ width: '100%'}}
                     placeholder="Nombre"
                     type='text'
-                    value={name}
-                    name='name'
+                    value={nombre_usuario}
+                    name='nombre_usuario'
                     onChange={handleChange}
                     className="m-1"
                 />
@@ -41,8 +41,8 @@ const RegisterForm = ({
                     className="m-1"
                 />
                 <div className="d-flex justify-content-between">
-                    <button type="submit" className="btn btn-primary m-1">Registrarse</button>
                     <button className="btn btn-primary m-1" onClick={() => window.location.href = '/'}>Iniciar sesión</button>
+                    <button type="submit" className="btn btn-primary m-1" onClick={handleSubmit}>Registrarse</button>
                 </div>
             </form>
         </div>

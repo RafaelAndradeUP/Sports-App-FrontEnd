@@ -2,8 +2,8 @@ import { useState, useEffect } from "react";
 import PostCard from "../cards/PostCard";
 import CreatePostForm from "../forms/CreatePostForm";
 import { useDispatch } from "react-redux";
-import {toast} from "react-toastify";
-import { borderColor } from "@mui/system";
+import { useSelector } from "react-redux";
+import {Avatar} from "@mui/material";
 
 
 const Feed = ({history}) => {
@@ -13,6 +13,10 @@ const Feed = ({history}) => {
         texto: '',
         imagen: ''
     });
+    const [posts, setPosts] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    const { auth } = useSelector((state) => ({ ...state }));
 
     const dispatch = useDispatch();
 
@@ -20,12 +24,17 @@ const Feed = ({history}) => {
         if(window.innerWidth < 800){
             setIsMobile(true);
         }
+        loadPosts();
     }, []);
 
     const handleChange = (e) => {
         setValues({ ...values, [e.target.name]: e.target.value });
     };
 
+    const loadPosts = async () => {
+        console.log('funcion loadingPosts');
+        setLoading(false);
+    }
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -85,14 +94,14 @@ const Feed = ({history}) => {
                 <div class="div-1" className="container-fluid  p-3 bg-dark">
                         <h1 className=" text-left">yarder</h1>
                 </div>
-                <div className="container-fluid">
+                <div style={{backgroundColor: "rgb(29, 30, 36)"}}>
                     <div className="row">   
                         <div className="col d-flex justify-content-center card">
                             <CreatePostForm values={values} handleChange={handleChange} handleSubmit={handleSubmit}/>
                             {
-                                prevPosts.map(p => {
+                                posts.length > 0 ? posts.map(p => {
                                     return <PostCard p={p} key={p.id}/>
-                                })
+                                }) : <p className="text-white text-center">Aun no tienes posts por mostrar :(</p>
                             }
                 
                         </div>             
@@ -108,23 +117,24 @@ const Feed = ({history}) => {
                 <div  className="container-fluid bg-dark p-3">
                     <h1 className=" text-left">yarder</h1>
                 </div>
-                <div style={{backgroundColor: "rgb(29, 30, 36)"}}  className="container-fluid">
+                <div>
                     <div  className="row m-5">
-                        <div className="col-3  d-flex justify-content-center">
-                            <h2>USUARIO</h2>
-                            <span onClick={logout} style={{cursor: 'pointer', color:"white"}}>Cerrar sesión</span>
+                        <div className="col-3  d-flex justify-content-center flex-wrap">
+                            {auth.user.imagen ? <Avatar src={auth.user.imagen} sx={{ width: 50, height: 50 }}/> : <Avatar src={auth.user.imagen} sx={{ width: 50, height: 50 }}>{auth.user.nombre_usuario[0]}</Avatar>}
+                            <p className="text-white p-2">{auth.user.nombre_usuario}</p>
+                            <span className="text-center" onClick={logout} style={{cursor: 'pointer', color:"white", width: '100%'}}>Cerrar sesión</span>
                         </div>       
-                        <div style={{backgroundColor: "rgb(29, 30, 36)",borderColor:"rgb(54, 56, 69)"}} className="col-6 d-flex justify-content-center card">
+                        <div style={{backgroundColor: "rgb(29, 30, 36)", borderColor:"rgb(54, 56, 69)"}} className="col-6 d-flex justify-content-center card">
                             <CreatePostForm values={values} handleChange={handleChange} handleSubmit={handleSubmit}/>
                             <h2 className="m-2">Últimas Noticias</h2>
                             {
-                                prevPosts.map(p => {
+                                posts.length > 0 ? posts.map(p => {
                                     return <PostCard p={p} key={p.id}/>
-                                })
+                                }) : <p className="text-white text-center">Aun no tienes posts por mostrar :(</p>
                             }
                 
                         </div>       
-                        <div style={{backgroundColor: "rgb(29, 30, 36)",borderColor:"rgb(54, 56, 69)"}}  className="col-3 card">
+                        <div style={{backgroundColor: "rgb(29, 30, 36)", borderColor:"rgb(54, 56, 69)"}}  className="col-3 card">
                             <div className="row m-5">
                                 <h3>Equipos seguidos</h3>
                             </div>
@@ -139,11 +149,11 @@ const Feed = ({history}) => {
     }
 
     return (
-        <>
+        <div style={{backgroundColor: "rgb(29, 30, 36)", height: '100vh'}} >
             {
-                isMobile ? responisive() : notResponisive()
+                loading ? <h1 className="text-white">Cargando...</h1> : isMobile ? responisive() : notResponisive()
             }
-        </>
+        </div>
     )
 }
 

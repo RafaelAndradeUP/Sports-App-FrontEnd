@@ -10,15 +10,6 @@ const CreatePostForm = ({
 
     const { tema, texto } = values;
 
-
-    const useStyles = makeStyles((theme) => ({
-        input: {
-          color: "#FFF",
-        },
-      }));
-
-    const classes = useStyles();
-
     return(
         <>
         <div style={{backgroundColor: "rgb(29, 30, 36)",borderColor:"rgb(54, 56, 69)"}} className="card mb-5 mt-3">
@@ -33,9 +24,8 @@ const CreatePostForm = ({
                 fullWidth
                 value={texto}
                 name="texto"
-                className='m-2 text-white'
+                className='m-2'
                 onChange={handleChange}
-                inputProps={{className:ClassNames.input}}
                 />
                 <button className="btn btn-primary m-1">+ Imagen</button>
                 <div className="d-flex justify-content-between m-2">
