@@ -8,6 +8,7 @@ import { Provider } from "react-redux";
 import { createStore } from "redux";
 import rootReducer from "./reducers";
 import { composeWithDevTools } from "redux-devtools-extension";
+import 'materialize-css/dist/css/materialize.min.css'
 
 const store = createStore(rootReducer, composeWithDevTools());
 

@@ -5,8 +5,10 @@ import Feed from "./pages/Feed"
 import Register from "./pages/Register"
 import NotFound from "./pages/NotFound"
 import ForgotPassword from "./pages/ForgotPassword"
+import EditProfile from "./pages/EditProfile"
 import {ToastContainer} from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
+import PrivateRoute from './PrivateRoute';
 
 const App = () => {
   return(
@@ -14,8 +16,9 @@ const App = () => {
       <ToastContainer position="top-center" />
       <Switch>
         <Route exact path='/' component={Home}/>
-        <Route exact path='/feed' component={Feed}/>
+        <PrivateRoute exact path='/feed' component={Feed}/>
         <Route exact path='/register' component={Register}/>
+        <PrivateRoute exact path='/my-profile/edit' component={EditProfile}/>
         <Route exact path='/forgot-password' component={ForgotPassword}/>
         <Route path='*' component={NotFound}/>
       </Switch>

@@ -36,7 +36,7 @@ const Register = ({ history }) => {
       };
 
     return (
-        <div>
+        <div className='bg-default'>
             <div className="container-fluid bg-dark p-3">
                 <h1 className="text-white text-center">¡Registrate en Yarder!</h1>
                 <p className="text-white text-center">Y únete a la mejor comunidad deportiva</p>
