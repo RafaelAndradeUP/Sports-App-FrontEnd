@@ -11,7 +11,7 @@ const RegisterForm = ({
     return(
         <>
         <div className="d-flex justify-content-center align-items-center m-3 flex-wrap">
-            <h1 className="text-center m-3" style={{display: 'block', width: '100%'}}>Registrarse</h1>
+            <h1 className="text-center m-3 text-white" style={{display: 'block', width: '100%'}}>Registrarse</h1>
             <form onSubmit={handleSubmit}>
                 <input 
                     style={{ width: '100%'}}
@@ -20,7 +20,7 @@ const RegisterForm = ({
                     value={nombre_usuario}
                     name='nombre_usuario'
                     onChange={handleChange}
-                    className="m-1"
+                    className="m-1 text-white"
                 />
                 <input 
                     style={{ width: '100%'}}
@@ -29,7 +29,7 @@ const RegisterForm = ({
                     value={email}
                     name='email'
                     onChange={handleChange}
-                    className="m-1"
+                    className="m-1 text-white"
                 />
                 <input 
                     style={{ width: '100%'}}
@@ -38,7 +38,7 @@ const RegisterForm = ({
                     value={password}
                     name='password'
                     onChange={handleChange}
-                    className="m-1"
+                    className="m-1 text-white"
                 />
                 <div className="d-flex justify-content-between">
                     <button className="btn btn-primary m-1" onClick={() => window.location.href = '/'}>Iniciar sesión</button>

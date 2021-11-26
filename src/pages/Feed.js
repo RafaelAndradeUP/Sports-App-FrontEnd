@@ -3,22 +3,31 @@ import PostCard from "../cards/PostCard";
 import CreatePostForm from "../forms/CreatePostForm";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
-import {Avatar} from "@mui/material";
+import {Avatar, formLabelClasses} from "@mui/material";
+import { newPost, getPosts, deletePost, like, dislike, getMyPL } from '../actions/posts';
+import {toast} from "react-toastify";
+import TopBar from '../components/TopBar';
 
 
 const Feed = ({history}) => {
     const [isMobile, setIsMobile] = useState(false);
-    const [values, setValues] = useState({
-        tema: '',
-        texto: '',
-        imagen: ''
-    });
     const [posts, setPosts] = useState([]);
+    const [pl, setPL] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [preview, setPreview] = useState('');
 
     const { auth } = useSelector((state) => ({ ...state }));
 
+    const [post, setPost] = useState({
+        tema: '',
+        texto: '',
+        imagen: '',
+        usuarioId: auth.user._id
+    });
+
     const dispatch = useDispatch();
+
+    const { tema, texto } = post;
 
     useEffect(() => {
         if(window.innerWidth < 800){
@@ -28,55 +37,116 @@ const Feed = ({history}) => {
     }, []);
 
     const handleChange = (e) => {
-        setValues({ ...values, [e.target.name]: e.target.value });
+        setPost({ ...post, [e.target.name]: e.target.value });
     };
 
     const loadPosts = async () => {
-        console.log('funcion loadingPosts');
+        try{
+            let res =  await getPosts();
+            setPosts(res.data);
+            loadPL();
+        }
+        catch(e){
+            console.log(e);
+        }
+    }
+
+    const loadPL = async () => {
+        try{
+            console.log('entro');
+            let res =  await getMyPL(auth.user._id);
+            console.log(res.data);
+            setPL(res.data);
+            console.log(res);
+        }
+        catch(e){
+            console.log(e);
+        }
         setLoading(false);
     }
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+        
+        const postData= new FormData();
+        postData.append('tema', post.tema);
+        postData.append('texto', post.texto);
+        post.imagen && postData.append('imagen', post.imagen);
+        postData.append('usuarioId', post.usuarioId);
+
+        if(!post.tema || !post.texto){
+            toast.warning(`Por favor rellena los campos`);
+            return;
+        }
+
+        try {
+            await newPost(postData);
+            toast.success(`¡Post creado!`);
+            setTimeout(() => {
+                window.location.reload();
+            }, 1000);
+        } catch (error) {
+            console.log(error);
+            toast.error(error);
+        }
+
     };
 
-    const prevPosts = [{
-        createdBy: 'Josue Olmos',
-        tema: 'PSG',
-        texto:'Creo que el PSG puede ganar facil con Messi #AlezParis!',
-        imagen:'https://media.ambito.com/p/d26c977a841fca6c7434175bf7942789/adjuntos/239/imagenes/039/399/0039399303/lionel-messi.jpg',
-        likes: 15,
-        createdAt: new Date('2021/09/28'),
-        id:0
-    },
-    {
-        createdBy: 'Rafa Andrade',
-        tema: 'PSG',
-        texto:'Messi no es el mismo fuera del barca :(',
-        imagen:'https://static.dw.com/image/54576763_303.jpg',
-        likes: 18,
-        createdAt: new Date('2021/09/21'),
-        id:1
-    },
-    {
-        createdBy: 'Arlette Garcia',
-        tema: 'Alfa Romeo',
-        texto:'Traigan de vuelta a Hulkenberg!',
-        imagen:'',
-        likes: 20,
-        createdAt: new Date('2021/09/19'),
-        id:2
-    },
-    {
-        createdBy: 'Jomi De León',
-        tema: 'MLB World Series',
-        texto:'Vamos Atlanta! #GoBraves',
-        imagen:'https://www.mystateline.com/wp-content/uploads/sites/17/2021/10/Photo-WS.jpg?w=2560&h=1440&crop=1',
-        likes: 23,
-        createdAt: new Date('2021/09/27'),
-        id:3
-    }];
+    const handleDelete = async (id) => {
+        try{
+            await deletePost(id);
+            toast.success(`¡Post eliminado!`);
+            setTimeout(() => {
+                window.location.reload();
+            },1000);
+        }
+        catch(error){
+            console.log(error);
+        }
+    }
+
+    const handleLike = async (usuarioId, postId) => {
+
+        const plData = new FormData();
+        plData.append('postId', postId);
+        plData.append('usuarioId', usuarioId);
+
+        try {
+            await like(plData);
+            loadPosts();
+        } catch (error) {
+            console.log(error);
+            toast.error('Ups! algo salió mal :(');
+        }
+    }
+
+    const handleDislike = async (postId, docId) => {
+        const data = {
+            postId: postId,
+            docId: docId
+        }
+        try {
+            await dislike(data);
+            loadPosts();
+        } catch (error) {
+            console.log(error);
+            toast.error('Ups! algo salió mal :(');
+        }
+    }
+
+    const handleImageChange = (e) => {
+        e.preventDefault();
+        if(!e.target.files[0]) return;
+        setPreview(URL.createObjectURL(e.target.files[0]));
+        setPost({ ...post, imagen: e.target.files[0] });
+    };
+
+    const removeImage = (e) => {
+        e.preventDefault();
+        setPreview('');
+        setPost({ ...post, imagen: '' });
+    };
 
     const logout = () => {
         dispatch({
@@ -88,58 +158,72 @@ const Feed = ({history}) => {
       };
 
     
-    const responisive = () => {
+    const responsive = () => {
         return (
             <>
-                <div class="div-1" className="container-fluid  p-3 bg-dark">
-                        <h1 className=" text-left">yarder</h1>
+                <div className="container-fluid div-1 p-3 bg-dark">
+                        <h1 className="text-left m-3" style={{ color:'#fbb141' }} onClick={() => history.push('/feed')}>yarder</h1>
                 </div>
-                <div style={{backgroundColor: "rgb(29, 30, 36)"}}>
-                    <div className="row">   
-                        <div className="col d-flex justify-content-center card">
-                            <CreatePostForm values={values} handleChange={handleChange} handleSubmit={handleSubmit}/>
-                            {
-                                posts.length > 0 ? posts.map(p => {
-                                    return <PostCard p={p} key={p.id}/>
-                                }) : <p className="text-white text-center">Aun no tienes posts por mostrar :(</p>
-                            }
-                
-                        </div>             
-                    </div>            
-                </div>
+
+                <div className="d-flex justify-content-center card m-0" style={{backgroundColor: "rgb(29, 30, 36)", borderColor:"rgb(54, 56, 69)"}}>
+                    <CreatePostForm values={post} handleChange={handleChange} handleSubmit={handleSubmit} handleImageChange={handleImageChange} preview={preview} removeImage={removeImage}/>
+                    {
+                        posts.length > 0 ? posts.map(p => {
+                            let liked = false;
+                            let docPL = {}
+                            pl.forEach(postlike => {
+                                if(postlike.postId === p._id) {
+                                    docPL = postlike;
+                                    liked = true;
+                                }
+                            })
+                            return <PostCard p={p} key={p._id} handleDelete={handleDelete} handleLike={handleLike} handleDislike={handleDislike} liked={liked} docPL={docPL}/>
+                        }) : <p className="text-white text-center">Aun no tienes posts por mostrar :(</p>
+                    }
+        
+                </div>                        
             </>
         )
     }
 
-    const notResponisive = () => {
+    const notResponsive = () => {
         return (
             <>
-                <div  className="container-fluid bg-dark p-3">
-                    <h1 className=" text-left">yarder</h1>
-                </div>
+                <TopBar/>
                 <div>
                     <div  className="row m-5">
-                        <div className="col-3  d-flex justify-content-center flex-wrap">
-                            {auth.user.imagen ? <Avatar src={auth.user.imagen} sx={{ width: 50, height: 50 }}/> : <Avatar src={auth.user.imagen} sx={{ width: 50, height: 50 }}>{auth.user.nombre_usuario[0]}</Avatar>}
-                            <p className="text-white p-2">{auth.user.nombre_usuario}</p>
-                            <span className="text-center" onClick={logout} style={{cursor: 'pointer', color:"white", width: '100%'}}>Cerrar sesión</span>
+                        <div className="col-2  d-flex justify-content-center flex-wrap">
+                            {auth.user.imagen && auth.user.imagen.contentType ? <Avatar src={`http://localhost:8000/usuario/imagen/${auth.user._id}`} sx={{ width: 70, height: 70 }}/> : <Avatar src={auth.user.imagen} sx={{ width: 70, height: 70 }}>{auth.user.nombre_usuario[0]}</Avatar>}
+                            <p className="text-white m-3" style={{fontSize: auth.user.nombre_usuario.length > 11 ? '1rem' : '1.5rem'}}>{auth.user.nombre_usuario}</p>
+                            <div>
+                                <span className="text-center m-3" onClick={logout} style={{cursor: 'pointer', color:"white", width: '100%'}}>Cerrar sesión</span>
+                                <span className="text-center m-3" style={{cursor: 'pointer', color:"white", width: '100%'}} onClick={() => history.push('/my-profile/edit')}>Editar perfil</span>
+                            </div>
                         </div>       
-                        <div style={{backgroundColor: "rgb(29, 30, 36)", borderColor:"rgb(54, 56, 69)"}} className="col-6 d-flex justify-content-center card">
-                            <CreatePostForm values={values} handleChange={handleChange} handleSubmit={handleSubmit}/>
-                            <h2 className="m-2">Últimas Noticias</h2>
+                        <div style={{backgroundColor: "rgb(29, 30, 36)", borderColor:"rgb(54, 56, 69)"}} className="col-7 d-flex justify-content-center card">
+                            <CreatePostForm values={post} handleChange={handleChange} handleSubmit={handleSubmit}  handleImageChange={handleImageChange} preview={preview} removeImage={removeImage}/>
+                            <h2 className="m-2 montserrat-font">Últimas Noticias</h2>
                             {
                                 posts.length > 0 ? posts.map(p => {
-                                    return <PostCard p={p} key={p.id}/>
-                                }) : <p className="text-white text-center">Aun no tienes posts por mostrar :(</p>
+                                    let liked = false;
+                                    let docPL = {}
+                                    pl.forEach(postlike => {
+                                        if(postlike.postId === p._id) {
+                                            docPL = postlike;
+                                            liked = true;
+                                        }
+                                    })
+                                    return <PostCard p={p} key={p._id} handleDelete={handleDelete} handleLike={handleLike} handleDislike={handleDislike} liked={liked} docPL={docPL}/>
+                                }) : <p className="text-white text-center m-5">Aun no tienes posts por mostrar :(</p>
                             }
                 
                         </div>       
                         <div style={{backgroundColor: "rgb(29, 30, 36)", borderColor:"rgb(54, 56, 69)"}}  className="col-3 card">
                             <div className="row m-5">
-                                <h3>Equipos seguidos</h3>
+                                <h4 className='text-white montserrat-font'>Equipos seguidos</h4>
                             </div>
                             <div className="row m-5">
-                                <h3>Personas a las que sigues</h3>
+                                <h4 className='text-white montserrat-font'>Personas a las que sigues</h4>
                             </div>
                         </div>       
                     </div>            
@@ -149,9 +233,9 @@ const Feed = ({history}) => {
     }
 
     return (
-        <div style={{backgroundColor: "rgb(29, 30, 36)", height: '100vh'}} >
+        <div style={{backgroundColor: "rgb(29, 30, 36)", borderColor:"rgb(54, 56, 69)"}}>
             {
-                loading ? <h1 className="text-white">Cargando...</h1> : isMobile ? responisive() : notResponisive()
+                loading ? <h1 className="text-white" >Cargando...</h1> : isMobile ? responsive() : notResponsive()
             }
         </div>
     )

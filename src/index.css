@@ -4,6 +4,7 @@ body {
   margin: 0;
   font-family: 'Playfair Display', serif;
   font-family: 'Roboto Condensed', sans-serif;
+  background-color: rgb(29, 30, 36);
 }
 
 code {
@@ -12,5 +13,18 @@ code {
 }
 
 html{
-  background-color: "rgb(29, 30, 36)";
+  background-color: rgb(29, 30, 36);
+}
+
+.montserrat-font{
+  font-family: 'Montserrat', sans-serif;
+}
+
+.bg-default{
+  background-color: rgb(29, 30, 36);
+  border-color: rgb(54, 56, 69);
+}
+
+.text-yellow{
+  color: #fbb141;
 }
