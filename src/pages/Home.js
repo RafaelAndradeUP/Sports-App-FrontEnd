@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import LoginForm from "../forms/LoginForm";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import image1 from "../img/fondo1.jpg";
 import { login } from "../actions/auth";
 
@@ -12,6 +13,12 @@ const Home = ({ history }) => {
         email: '',
         password: ''
     });
+
+    const { auth } = useSelector((state) => ({ ...state }));
+
+    useEffect(() => {
+      if(auth && auth.token) history.push('/feed');
+    }, []);
 
     const dispatch = useDispatch();
 

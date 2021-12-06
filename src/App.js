@@ -6,6 +6,7 @@ import Register from "./pages/Register"
 import NotFound from "./pages/NotFound"
 import ForgotPassword from "./pages/ForgotPassword"
 import EditProfile from "./pages/EditProfile"
+import Search from "./pages/Search"
 import {ToastContainer} from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
 import PrivateRoute from './PrivateRoute';
@@ -19,6 +20,7 @@ const App = () => {
         <PrivateRoute exact path='/feed' component={Feed}/>
         <Route exact path='/register' component={Register}/>
         <PrivateRoute exact path='/my-profile/edit' component={EditProfile}/>
+        <PrivateRoute exact path='/search/:searchCriteria' component={Search}/>
         <Route exact path='/forgot-password' component={ForgotPassword}/>
         <Route path='*' component={NotFound}/>
       </Switch>

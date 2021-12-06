@@ -5,6 +5,7 @@ import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import {Avatar, formLabelClasses} from "@mui/material";
 import { newPost, getPosts, deletePost, like, dislike, getMyPL } from '../actions/posts';
+import { getMyST, getMySU } from '../actions/auth';
 import {toast} from "react-toastify";
 import TopBar from '../components/TopBar';
 
@@ -13,6 +14,8 @@ const Feed = ({history}) => {
     const [isMobile, setIsMobile] = useState(false);
     const [posts, setPosts] = useState([]);
     const [pl, setPL] = useState([]);
+    const [su, setSU] = useState([]);
+    const [st, setST] = useState([]);
     const [loading, setLoading] = useState(true);
     const [preview, setPreview] = useState('');
 
@@ -34,6 +37,9 @@ const Feed = ({history}) => {
             setIsMobile(true);
         }
         loadPosts();
+        loadSU();
+        loadST();
+        console.log(posts);
     }, []);
 
     const handleChange = (e) => {
@@ -42,7 +48,8 @@ const Feed = ({history}) => {
 
     const loadPosts = async () => {
         try{
-            let res =  await getPosts();
+            let res =  await getPosts(auth.user._id);
+            console.log(res.data);
             setPosts(res.data);
             loadPL();
         }
@@ -53,11 +60,30 @@ const Feed = ({history}) => {
 
     const loadPL = async () => {
         try{
-            console.log('entro');
             let res =  await getMyPL(auth.user._id);
-            console.log(res.data);
             setPL(res.data);
-            console.log(res);
+        }
+        catch(e){
+            console.log(e);
+        }
+        setLoading(false);
+    }
+
+    const loadSU = async () => {
+        try{
+            let res =  await getMySU(auth.user._id);
+            setSU(res.data);
+        }
+        catch(e){
+            console.log(e);
+        }
+        setLoading(false);
+    }
+
+    const loadST = async () => {
+        try{
+            let res =  await getMyST(auth.user._id);
+            setST(res.data);
         }
         catch(e){
             console.log(e);
@@ -195,6 +221,7 @@ const Feed = ({history}) => {
                         <div className="col-2  d-flex justify-content-center flex-wrap">
                             {auth.user.imagen && auth.user.imagen.contentType ? <Avatar src={`http://localhost:8000/usuario/imagen/${auth.user._id}`} sx={{ width: 70, height: 70 }}/> : <Avatar src={auth.user.imagen} sx={{ width: 70, height: 70 }}>{auth.user.nombre_usuario[0]}</Avatar>}
                             <p className="text-white m-3" style={{fontSize: auth.user.nombre_usuario.length > 11 ? '1rem' : '1.5rem'}}>{auth.user.nombre_usuario}</p>
+                            <span className='text-white'>{auth.user.nseguidores} seguidores</span>
                             <div>
                                 <span className="text-center m-3" onClick={logout} style={{cursor: 'pointer', color:"white", width: '100%'}}>Cerrar sesión</span>
                                 <span className="text-center m-3" style={{cursor: 'pointer', color:"white", width: '100%'}} onClick={() => history.push('/my-profile/edit')}>Editar perfil</span>
@@ -219,11 +246,25 @@ const Feed = ({history}) => {
                 
                         </div>       
                         <div style={{backgroundColor: "rgb(29, 30, 36)", borderColor:"rgb(54, 56, 69)"}}  className="col-3 card">
-                            <div className="row m-5">
-                                <h4 className='text-white montserrat-font'>Equipos seguidos</h4>
-                            </div>
-                            <div className="row m-5">
+                            <div className="m-5">
                                 <h4 className='text-white montserrat-font'>Personas a las que sigues</h4>
+                                <div className='d-flex'>
+                                    {
+                                        su.map(s => {
+                                            return s.Seguido.imagen && s.Seguido.imagen.contentType ? <Avatar alt={s.Seguido.nombre_usuario} src={`http://localhost:8000/usuario/imagen/${s.Seguido._id}`} sx={{ width: 50, height: 50 }}/> : <Avatar alt={s.Seguido.nombre_usuario} sx={{ width: 50, height: 50 }}>{s.Seguido.nombre_usuario[0]}</Avatar>
+                                        })
+                                    }
+                                </div>
+                            </div>
+                            <div className="m-5">
+                                <h4 className='text-white montserrat-font'>Equipos Seguidos</h4>
+                                <div className='d-flex'>
+                                    {
+                                        st.map(s => {
+                                            return <Avatar alt={s.equipoId} src={s.imagenEquipo} sx={{ width: 50, height: 50 }}/>
+                                        })
+                                    }
+                                </div>
                             </div>
                         </div>       
                     </div>            
